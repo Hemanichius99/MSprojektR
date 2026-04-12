@@ -27,6 +27,17 @@ bbpp = function(wektor, nazwa = "dane") {
   par(mfrow = c(1, 1))
 }
 
-phg = function(wektor, name, breaks="Sturges") { 
-  hist(wektor,  main = name, xlab = "Zawartość cukru [%]", breaks=breaks)
+phg = function(wektor, name, breaks = "Sturges") {
+  hist(wektor,
+       main = name,
+       xlab = "Zawartość cukru [%]",
+       breaks = breaks,
+       xaxt = "n")
+  
+  if (is.numeric(breaks)) {
+    srodki = (breaks[-length(breaks)] + breaks[-1]) / 2
+    axis(1, at = srodki, labels = round(srodki, 2))
+  } else {
+    axis(1)  # domyślna oś X dla Sturges
+  }
 }
