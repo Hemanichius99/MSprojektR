@@ -26,3 +26,7 @@ bbpp = function(wektor, nazwa = "dane") {
   
   par(mfrow = c(1, 1))
 }
+
+phg = function(wektor, name, breaks="Sturges") { 
+  hist(wektor,  main = name, xlab = "Zawartość cukru [%]", breaks=breaks)
+}
