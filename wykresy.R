@@ -1,5 +1,5 @@
 # wykresy.R
-rysuj_wykresy = function(wektor, nazwa = "dane") {
+bbpp = function(wektor, nazwa = "dane") {
   
   par(mfrow = c(1, 2))
   
