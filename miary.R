@@ -70,4 +70,3 @@ oblicz_miary = function(wektor) {
   return(tabela_wynikow)
   
 }
-  

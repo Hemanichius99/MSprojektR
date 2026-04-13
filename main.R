@@ -10,10 +10,10 @@ wielkopolskie = read.csv("wielkopolskie.csv", header = FALSE)
 wektor_wielkopolskie = unlist(wielkopolskie, use.names = FALSE)
 
 # zadanie 1
-bbpp(wektor_wielkopolskie, nazwa = "Wielkopolskie")
-bbpp(wektor_lubuskie, nazwa = "lubuskie")
+bbpp(wektor_wielkopolskie, "Wielkopolskie")
+bbpp(wektor_lubuskie, "lubuskie")
 
-#zadanie 2
+#zadanie 2A
 #a
 
 #obliczone wartości LUBUSKIE
