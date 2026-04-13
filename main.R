@@ -30,11 +30,11 @@ print(miary_W, row.names = FALSE)
 
 #obliczone wartości LUBUSKIE
 
-#TODO
+#TODO - zrobione wewnatrz podpunktu a
 
 #obliczone wartości WIELKOPOLSKIE
 
-#TODO
+#TODO - zrobione wewnatrz podpunktu a
 
 #WYKRESY
 lubuskie_rozdzielczy = seq(min(wektor_lubuskie), max(wektor_lubuskie), length.out = 8)
