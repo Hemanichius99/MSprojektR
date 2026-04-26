@@ -21,3 +21,8 @@ bbpp$stats
 #PODPUNKT 2.
 #source('funkcje_p2.R', echo = TRUE)
 source('funkcje_p2.R')
+wyswietl_lubuskie(wl)
+wyswietl_wielkopolskie(ww)
+
+#PODPUNKT 3.
+source('funkcje_p3.R')
