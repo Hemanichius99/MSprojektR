@@ -3,6 +3,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("wykresy.R")
 source("miary.R")
 source("odch_std.R")
+source("hipotezy.R")
 
 lubuskie = read.csv("lubuskie.csv", header = FALSE)
 wektor_lubuskie = unlist(lubuskie, use.names = FALSE)
@@ -49,6 +50,9 @@ phg(wektor_wielkopolskie, "wielkopolskie rozdzielczy", wielkopolskie_rozdzielczy
 #zadanie 5
 wynik <- analiza_odchylenia_region(wektor_wielkopolskie)
 drukuj_wyniki(wynik, "Województwo Wielkopolskie")
+
+#zadanie 6
+mhipo(lubuskie, wielkopolskie)
 
 
 
