@@ -12,10 +12,9 @@ mhipo = function(w1, w2) {
   s2 = sum((w2 - sr2)^2) / (n2 - 1)
   
   # TEST F (równość wariancji)
-  # H0: wariancje równe, H1: różne (dwustronny)
+  # H0: wariancje równe, H1: różne (dwustronny) 
   F_stat = max(s1, s2) / min(s1, s2)
   
-  # stopnie swobody: większa wariancja w liczniku
   if (s1 >= s2) {
     df_F1 = n1 - 1
     df_F2 = n2 - 1
@@ -44,7 +43,7 @@ mhipo = function(w1, w2) {
   
   # --- (test prawostronny: mu_L > mu_W)
   t_kr = qt(0.95, df_t)   # jednostronny prawy, alpha = 0.05
-  
+  cat("\n=== HIPOTEZA H0: mu_L <= mu_W | HIPOTEZA H1: mu_L > mu_W ===\n")
   cat("\n=== TEST T (mu_L > mu_W) ===\n")
   cat("Srednia w1 (lubuskie)    =", sr1, "\n")
   cat("Srednia w2 (wielkopolskie) =", sr2, "\n")
