@@ -109,6 +109,7 @@ wart_sr = function (wektor) {
   wynik_sr = c(
     xsr_sr1, m_sr1, moda_sr1, q1_sr1, q3_sr1, var_sr1,  os_sr1_r, var_sr1_n, os_sr1_r_n,d1_sr1, d2_sr1, Q_sr1, v_sr1, vq_sr1, sk_sr1, kur_sr1, 0
   )
+  #todo linijka wyzej, eksces przedzialowy nie jest wyliczony, zalozone jest stale zero, trzeba podstawic do wzoru
   
   return (wynik_sr)
 }

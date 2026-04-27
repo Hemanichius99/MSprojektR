@@ -4,6 +4,7 @@ source("wykresy.R")
 source("miary.R")
 source("odch_std.R")
 source("hipotezy.R")
+source("zad4.R")
 
 lubuskie = read.csv("lubuskie.csv", header = FALSE)
 wektor_lubuskie = unlist(lubuskie, use.names = FALSE)
@@ -46,6 +47,9 @@ wielkopolskie_rozdzielczy = seq(min(wektor_wielkopolskie), max(wektor_wielkopols
 phg(wektor_wielkopolskie, "wielkopolskie rozdzielczy", wielkopolskie_rozdzielczy)
 
 
+#zad4
+wynik_zad4 <- przedzialowo_cukier_region(lubuskie)
+wypisz_z4(wynik_zad4, "Wojewodztwo lubuskie")
 
 #zadanie 5
 wynik <- analiza_odchylenia_region(wektor_wielkopolskie)
