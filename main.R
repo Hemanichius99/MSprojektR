@@ -2,9 +2,10 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 source("wykresy.R")
 source("miary.R")
-source("odch_std.R")
+source("zad5.R")
 source("hipotezy.R")
 source("zad4.R")
+source("zad3.R")
 
 lubuskie = read.csv("lubuskie.csv", header = FALSE)
 wektor_lubuskie = unlist(lubuskie, use.names = FALSE)
@@ -16,8 +17,8 @@ wektor_wielkopolskie = unlist(wielkopolskie, use.names = FALSE)
 bbpp(wektor_wielkopolskie, "Wielkopolskie")
 bbpp(wektor_lubuskie, "lubuskie")
 
-#zadanie 2A
-#a
+#zadanie 2
+#a i b w jednej tabeli
 
 #obliczone wartości LUBUSKIE
 cat("\n=== MIARY: WOJEWÓDZTWO LUBUSKIE ===\n")
@@ -29,16 +30,6 @@ cat("\n=== MIARY: WOJEWÓDZTWO WIELKOPOLSKIE ===\n")
 miary_W = oblicz_miary(wektor_wielkopolskie)
 print(miary_W, row.names = FALSE)
 
-#b 
-
-#obliczone wartości LUBUSKIE
-
-#TODO - zrobione wewnatrz podpunktu a
-
-#obliczone wartości WIELKOPOLSKIE
-
-#TODO - zrobione wewnatrz podpunktu a
-
 #WYKRESY
 lubuskie_rozdzielczy = seq(min(wektor_lubuskie), max(wektor_lubuskie), length.out = 8)
 phg(wektor_lubuskie, "lubuskie rozdzielczy", lubuskie_rozdzielczy)
@@ -46,6 +37,15 @@ phg(wektor_lubuskie, "lubuskie rozdzielczy", lubuskie_rozdzielczy)
 wielkopolskie_rozdzielczy = seq(min(wektor_wielkopolskie), max(wektor_wielkopolskie), length.out = 8)
 phg(wektor_wielkopolskie, "wielkopolskie rozdzielczy", wielkopolskie_rozdzielczy)
 
+#zadanie 3
+
+# Analiza dla Województwa Lubuskiego
+wynik3_lubuskie <- test_lillieforsa(wektor_lubuskie, "Województwo Lubuskie")
+drukuj_test_normalnosci(wynik3_lubuskie)
+
+# Analiza dla Województwa Wielkopolskiego
+wynik3_wielkopolskie <- test_lillieforsa(wektor_wielkopolskie, "Województwo Wielkopolskie")
+drukuj_test_normalnosci(wynik3_wielkopolskie)
 
 #zad4
 wynik_zad4 <- przedzialowo_cukier_region(lubuskie)
