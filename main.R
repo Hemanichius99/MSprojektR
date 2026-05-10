@@ -57,8 +57,8 @@ drukuj_wyniki(wynik, "Województwo Wielkopolskie")
 
 #zadanie 6
 alpha = 0.05
-mhipo(lubuskie, wielkopolskie, alpha)
+mhipo(wektor_lubuskie, wektor_wielkopolskie, alpha)
 
 
-
-
+#zadanie 7
+ptt(wektor_lubuskie, wektor_wielkopolskie, alpha, hipoteza = "dwustronny", R = 10000)

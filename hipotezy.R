@@ -93,3 +93,64 @@ mhipo = function(w1, w2, alpha, hipoteza = "dwustronny") {
   invisible(list(t = t_stat, t_kr = t_kr, df = df_t, sr1 = sr1, sr2 = sr2,
                  rowne_wariancje = rowne_wariancje, odrzuc_H0 = odrzuc))
 }
+
+ptt = function(w1, w2, alpha = 0.05, hipoteza = "dwustronny", R = 10000) {
+  
+  # hipoteza: "dwustronny"   -> H1: mu1 != mu2
+  #           "prawostronny" -> H1: mu1 >  mu2
+  #           "lewostronny"  -> H1: mu1 <  mu2
+  
+  hipoteza  = tolower(hipoteza)
+  n1        = length(w1)
+  n2        = length(w2)
+  pula      = c(w1, w2)
+  n_total   = n1 + n2
+  
+  # Zaobserwowana różnica średnich
+  t_obs = mean(w1) - mean(w2)
+  # Symulacja Monte Carlo — R permutacji
+  t_perm = numeric(R)
+  for (i in 1:R) {
+    losowanie  = sample(pula, n_total, replace = FALSE)
+    g1         = losowanie[1:n1]
+    g2         = losowanie[(n1+1):n_total]
+    t_perm[i]  = mean(g1) - mean(g2)
+  }
+  
+  # p-value zależne od hipotezy
+  if (hipoteza == "dwustronny") {
+    p_val   = mean(abs(t_perm) >= abs(t_obs))
+    opis_H0 = "mu1 = mu2"
+    opis_H1 = "mu1 != mu2"
+  } else if (hipoteza == "prawostronny") {
+    p_val   = mean(t_perm >= t_obs)
+    opis_H0 = "mu1 <= mu2"
+    opis_H1 = "mu1 > mu2"
+  } else if (hipoteza == "lewostronny") {
+    p_val   = mean(t_perm <= t_obs)
+    opis_H0 = "mu1 >= mu2"
+    opis_H1 = "mu1 < mu2"
+  } else {
+    stop("Nieznany typ hipotezy. Uzyj: 'dwustronny', 'prawostronny' lub 'lewostronny'.")
+  }
+  
+  # Wyniki
+  cat("\n=== TEST PERMUTACYJNY (Monte Carlo) ===\n")
+  cat("H0:", opis_H0, "\n")
+  cat("H1:", opis_H1, "\n")
+  cat("Poziom istotnosci alpha =", alpha, "\n")
+  cat("Liczba permutacji R    =", R, "\n")
+  cat("\nZaobserwowana roznica srednich =", round(t_obs, 4), "\n")
+  cat("p-value =", formatC(p_val, format = "f", digits = 4), "\n")
+  
+  cat("\n=== DECYZJA ===\n")
+  if (p_val <= alpha) {
+    cat("p <=", alpha, ": ODRZUCAMY H0\n")
+    cat("Na poziomie istotnosci", alpha, "– podstawy do przyjecia H1 (", opis_H1, ")\n")
+  } else {
+    cat("p >", alpha, ": BRAK PODSTAW do odrzucenia H0\n")
+    cat("Na poziomie istotnosci", alpha, "– brak dowodow na H1 (", opis_H1, ")\n")
+  }
+  
+  invisible(list(t_obs = t_obs, t_perm = t_perm, p_val = p_val))
+}
