@@ -1,4 +1,8 @@
-mhipo = function(w1, w2) {
+mhipo = function(w1, w2, alpha, hipoteza = "dwustronny") {
+  
+  # hipoteza: "dwustronny"   -> H1: mu1 != mu2
+  #           "prawostronny" -> H1: mu1 >  mu2
+  #           "lewostronny"  -> H1: mu1 <  mu2
   
   # DANE PODSTAWOWE
   n1 = length(w1)
@@ -11,8 +15,7 @@ mhipo = function(w1, w2) {
   s1 = sum((w1 - sr1)^2) / (n1 - 1)
   s2 = sum((w2 - sr2)^2) / (n2 - 1)
   
-  # TEST F (równość wariancji)
-  # H0: wariancje równe, H1: różne (dwustronny) 
+  # TEST F (równość wariancji) – zawsze dwustronny na poziomie alpha
   F_stat = max(s1, s2) / min(s1, s2)
   
   if (s1 >= s2) {
@@ -23,39 +26,70 @@ mhipo = function(w1, w2) {
     df_F2 = n1 - 1
   }
   
-  F_kr = qf(0.95, df_F1, df_F2)   # test dwustronny alpha=0.05 -> 0.95 w prawym ogonie
+  F_kr = qf(1 - alpha, df_F1, df_F2)
   rowne_wariancje = (F_stat <= F_kr)
   
   # STATYSTYKA T
   if (rowne_wariancje) {
-    # Wariancje równe - pooled
-    sp2 = ((n1 - 1) * s1 + (n2 - 1) * s2) / (n1 + n2 - 2)
-    sp  = sqrt(sp2)
+    sp2    = ((n1 - 1) * s1 + (n2 - 1) * s2) / (n1 + n2 - 2)
+    sp     = sqrt(sp2)
     t_stat = (sr1 - sr2) / (sp * sqrt(1/n1 + 1/n2))
-    df_t = n1 + n2 - 2
+    df_t   = n1 + n2 - 2
   } else {
-    # Wariancje nierówne - Welch
-    se = sqrt(s1/n1 + s2/n2)
+    se     = sqrt(s1/n1 + s2/n2)
     t_stat = (sr1 - sr2) / se
-    # stopnie swobody Welcha
-    df_t = (s1/n1 + s2/n2)^2 / ((s1/n1)^2/(n1-1) + (s2/n2)^2/(n2-1))
+    df_t   = (s1/n1 + s2/n2)^2 / ((s1/n1)^2/(n1-1) + (s2/n2)^2/(n2-1))
   }
   
-  # --- (test prawostronny: mu_L > mu_W)
-  t_kr = qt(0.95, df_t)   # jednostronny prawy, alpha = 0.05
-  cat("\n=== HIPOTEZA H0: mu_L <= mu_W | HIPOTEZA H1: mu_L > mu_W ===\n")
-  cat("\n=== TEST T (mu_L > mu_W) ===\n")
-  cat("Srednia w1 (lubuskie)    =", sr1, "\n")
-  cat("Srednia w2 (wielkopolskie) =", sr2, "\n")
-  cat("t =", t_stat, "| t_kr =", t_kr, "| df =", df_t, "\n")
+  # WARTOŚĆ KRYTYCZNA i DECYZJA zależne od wyboru hipotezy
+  hipoteza = tolower(hipoteza)
   
-  # --- DECYZJA ---
-  cat("\n=== DECYZJA ===\n")
-  if (t_stat > t_kr) {
-    cat("t > t_kr: ODRZUCAMY H0\n")
-    cat("Na poziomie istotnosci 0.05 zawartość cukru w lubuskim jest istotnie wieksza.\n")
+  if (hipoteza == "dwustronny") {
+    t_kr     = qt(1 - alpha/2, df_t)
+    odrzuc   = (abs(t_stat) > t_kr)
+    opis_H0  = "mu1 = mu2"
+    opis_H1  = "mu1 != mu2"
+    warunek  = paste("|t| =", round(abs(t_stat), 4), ">  t_kr =", round(t_kr, 4))
+  } else if (hipoteza == "prawostronny") {
+    t_kr     = qt(1 - alpha, df_t)
+    odrzuc   = (t_stat > t_kr)
+    opis_H0  = "mu1 <= mu2"
+    opis_H1  = "mu1 > mu2"
+    warunek  = paste("t =", round(t_stat, 4), ">  t_kr =", round(t_kr, 4))
+  } else if (hipoteza == "lewostronny") {
+    t_kr     = qt(alpha, df_t)       # wartość ujemna
+    odrzuc   = (t_stat < t_kr)
+    opis_H0  = "mu1 >= mu2"
+    opis_H1  = "mu1 < mu2"
+    warunek  = paste("t =", round(t_stat, 4), "<  t_kr =", round(t_kr, 4))
   } else {
-    cat("t <= t_kr: BRAK PODSTAW do odrzucenia H0\n")
-    cat("Na poziomie istotnosci 0.05 nie mozna twierdzic, ze lubuskie ma wieksza zawartosc cukru.\n")
+    stop("Nieznany typ hipotezy. Użyj: 'dwustronny', 'prawostronny' lub 'lewostronny'.")
   }
+  
+  # WYNIKI
+  cat("\n=== HIPOTEZA ===\n")
+  cat("H0:", opis_H0, "\n")
+  cat("H1:", opis_H1, "\n")
+  cat("Poziom istotnosci alpha =", alpha, "\n")
+  
+  cat("\n=== TEST F (rownosc wariancji) ===\n")
+  cat("F =", round(F_stat, 4), "| F_kr =", round(F_kr, 4),
+      "| Wariancje:", ifelse(rowne_wariancje, "ROWNE (pooled t)", "NIEROWNE (Welch)"), "\n")
+  
+  cat("\n=== TEST T ===\n")
+  cat("Srednia w1 =", round(sr1, 4), "\n")
+  cat("Srednia w2 =", round(sr2, 4), "\n")
+  cat("t =", round(t_stat, 4), "| t_kr =", round(t_kr, 4), "| df =", round(df_t, 2), "\n")
+  
+  cat("\n=== DECYZJA ===\n")
+  if (odrzuc) {
+    cat(warunek, ": ODRZUCAMY H0\n")
+    cat("Na poziomie istotnosci", alpha, "– podstawy do przyjecia H1 (", opis_H1, ")\n")
+  } else {
+    cat(warunek, ": BRAK PODSTAW do odrzucenia H0\n")
+    cat("Na poziomie istotnosci", alpha, "– brak dowodow na H1 (", opis_H1, ")\n")
+  }
+  
+  invisible(list(t = t_stat, t_kr = t_kr, df = df_t, sr1 = sr1, sr2 = sr2,
+                 rowne_wariancje = rowne_wariancje, odrzuc_H0 = odrzuc))
 }

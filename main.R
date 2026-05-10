@@ -56,7 +56,8 @@ wynik <- analiza_odchylenia_region(wektor_wielkopolskie)
 drukuj_wyniki(wynik, "Województwo Wielkopolskie")
 
 #zadanie 6
-mhipo(lubuskie, wielkopolskie)
+alpha = 0.05
+mhipo(lubuskie, wielkopolskie, alpha)
 
 
 
