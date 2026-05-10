@@ -1,17 +1,19 @@
 #przecietna zawartosc cukru w procentach w regionie
-przedzialowo_cukier_region <- function(wektor_z4)
+przedzialowo_cukier_region <- function(wektor_z4, ufnosc=0.95)
 {
   # wektor_z4=wektor_lubuskie;
   #ilosc pomiarow
   z4_n=length(wektor_z4);
   
-  if (z4_n < 30) stop("nie zaimplemetowano algorytmu dla malych danych")
+  if (z4_n < 30) stop("Podane dane nie pełniają wymagań dotyczących liczebności próbki")
   
   #srednia z pomiarow
   srednia_z4=(sum(wektor_z4))/z4_n;
   
   #wsp ufnosci dla alfa=0.95
-  tablica_095=1.96;
+  #tablica_095=1.96;
+  alfa=1-ufnosc;
+  tablica_095=qnorm(1-alfa/2);
   
   #wariancja
   wariancja_z4 <- sum((wektor_z4 - srednia_z4)^2) / (z4_n - 1)
@@ -42,6 +44,7 @@ przedzialowo_cukier_region <- function(wektor_z4)
   
   #zwracanie wynikow
   return_z4=list(
+    wspUfnosci=ufnosc,
     dolna_granica=min_z4,
     gorna_granica=max_z4,
     precyzja=wzgl_prec_z4,
@@ -52,14 +55,15 @@ przedzialowo_cukier_region <- function(wektor_z4)
 
 
 
-# zajumana funkcja do ładnego wyświetlania wyników
+# funkcja do ładnego wyświetlania wyników
 wypisz_z4 <- function(lista, nazwa_regionu) {
   cat("\n====================================================\n")
   cat(sprintf("SZACOWANIE PROCENTOWEJ ZAWARTOSCI CUKRU W %s\n", nazwa_regionu))
   cat("====================================================\n")
-  cat(sprintf("Minimum przedzialu:          %.4f%%\n", lista$dolna_granica))
-  cat(sprintf("Maksimum przedzialu:         %.4f%%\n", lista$gorna_granica))
-  cat(sprintf("Wzgledna precyzja:           %.2f%%\n", lista$precyzja))
+  cat(sprintf("Przyjęty współczynnik ufności:    %.2f\n", lista$wspUfnosci))
+  cat(sprintf("Minimum przedzialu:               %.4f%%\n", lista$dolna_granica))
+  cat(sprintf("Maksimum przedzialu:              %.4f%%\n", lista$gorna_granica))
+  cat(sprintf("Wzgledna precyzja:                %.2f%%\n", lista$precyzja))
   cat(sprintf(lista$analiza))
   cat("\n====================================================\n")
 }

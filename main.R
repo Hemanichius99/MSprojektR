@@ -48,7 +48,7 @@ wynik3_wielkopolskie <- test_lillieforsa(wektor_wielkopolskie, "Województwo Wie
 drukuj_test_normalnosci(wynik3_wielkopolskie)
 
 #zad4
-wynik_zad4 <- przedzialowo_cukier_region(lubuskie)
+wynik_zad4 <- przedzialowo_cukier_region(lubuskie,0.95)
 wypisz_z4(wynik_zad4, "Wojewodztwo lubuskie")
 
 #zadanie 5
