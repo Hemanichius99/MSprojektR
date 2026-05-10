@@ -1,6 +1,7 @@
 # PODPUNKT 3.
 setwd("D:/POLITECHNIKA/SEMESTR 4/STATYSTYKA/P/PROJEKT W R/projekt/Projekt")
 
+# source('wczytaj_dane.R', echo = TRUE)
 source('wczytaj_dane.R')
 source('funkcje_p2.R')
 lubuskie_sort = sort(lubuskie)

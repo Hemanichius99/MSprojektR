@@ -11,9 +11,9 @@ source('wczytaj_dane.R')
 #source('funkcje_p1.R', echo = TRUE)
 source('funkcje_p1.R')
 
-bp(calosc, 'calosc')
-bp(lubuskie, 'lubuskie')
-bp(wielkopolskie, 'wielkopolskie')
+bp(calosc, 'Oba województwa')
+bp(lubuskie, 'Województwo lubuskie')
+bp(wielkopolskie, 'Województwo wielkopolskie')
 
 bbpp = bp(lubuskie, 'lubuskie')
 bbpp$stats
@@ -21,8 +21,15 @@ bbpp$stats
 #PODPUNKT 2.
 #source('funkcje_p2.R', echo = TRUE)
 source('funkcje_p2.R')
+sr(calosc, 'Oba województwa')
+sr(lubuskie, 'Województwo lubuskie')
+sr(wielkopolskie, 'Województwo wielkopolskie')
+
 wyswietl_lubuskie(wl)
 wyswietl_wielkopolskie(ww)
 
 #PODPUNKT 3.
 source('funkcje_p3.R')
+
+min(lubuskie)
+max(lubuskie)
