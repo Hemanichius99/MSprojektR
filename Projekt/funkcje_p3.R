@@ -7,31 +7,33 @@ source('funkcje_p2.R')
 lubuskie_sort = sort(lubuskie)
 wielkopolskie_sort = sort(wielkopolskie)
 
-# wartości średnie
-m_lubuskie = wl["wsss"]  
-m_wielkopolskie = ww["wsss"]
+# Wartości średnie
+m_lubuskie = as.double(wl["wsss"])
+m_wielkopolskie = as.double(ww["wsss"])
 
-# odchylenia standardowe
-sig_lubuskie = wl["osnss"]
-sig_wielkopolskie = ww["osnss"]
+# Odchylenia standardowe
+sig_lubuskie = as.double(wl["osss"])
+sig_wielkopolskie = as.double(ww["osss"])
 
-# wartości standaryzowane (xi-m)sigma
+# -- Obliczenia statystyki Kołmogorowa --
+
+# Wartości standaryzowane (xi-m)/sigma
 standaryz_x_lubuskie = (lubuskie_sort - m_lubuskie) / sig_lubuskie
 standaryz_x_wielkopolskie = (wielkopolskie_sort - m_wielkopolskie) / sig_wielkopolskie
 
-# wyliczenia granicy prawostronnej dystrybuanty empirycznej: i/n i=1,2,3.....,n
+# Wyliczenia granicy prawostronnej dystrybuanty empirycznej: i/n i=1,2,3.....,n
 i_nad_n_l =(1:length(lubuskie_sort)) / length(lubuskie_sort) 
-i_odj_1_nad_n_l =((1:length(lubuskie_sort)) - 1) / length(lubuskie_sort)
+i_nad_n_w =(1:length(wielkopolskie_sort)) / length(wielkopolskie_sort)
 
-# wyliczenia granicy lewostronnej dystrybuanty empirycznej: (i-1)/n i=1,2,3.....,n
-i_nad_n_w =(1:length(wielkopolskie_sort)) / length(wielkopolskie_sort) 
+# Wyliczenia granicy lewostronnej dystrybuanty empirycznej: (i-1)/n i=1,2,3.....,n
+i_odj_1_nad_n_l =((1:length(lubuskie_sort)) - 1) / length(lubuskie_sort)
 i_odj_1_nad_n_w =((1:length(wielkopolskie_sort)) - 1) / length(wielkopolskie_sort)
 
 # Dystrybuanta F0
 x1 = 1:length(lubuskie_sort)
 x2 = 1:length(wielkopolskie_sort)
-F0_lubuskie = pnorm(x1, mean = m_lubuskie, sd = sig_lubuskie)
-F0_wielkopolskie = pnorm(x2, mean = m_wielkopolskie, sd = sig_wielkopolskie)
+F0_lubuskie = pnorm(lubuskie_sort, mean = m_lubuskie, sd = sig_lubuskie)
+F0_wielkopolskie = pnorm(wielkopolskie_sort, mean = m_wielkopolskie, sd = sig_wielkopolskie)
 
 # |i/n - F0|
 d_plus_l = abs(i_nad_n_l - F0_lubuskie)
@@ -66,12 +68,38 @@ k54 = 0.120
 k50 = 0.125
 
 # Test Kołmogorowa lubuskie
+cat('=================================================================================================================================================\n')
+cat('WYNIK TESTU KOŁMOGOROWA-LILLIEFORSA DLA WOJEWÓDZTWA LUBUSKIEGO\n')
+cat(format("Statystyka testowa Dn =", justify = 'right', width = 44), sep = '', format(D_54_l, width = 12, justify = 'right'), '\n')
+cat(format("Przedział krytyczny =", justify = 'right', width = 44), sep = '', format('<', width = 5, justify = 'right'), format(k54, width = 1, justify = 'right'), format(', ', width = 1, justify = 'right'), format(1, width = 1, justify = 'right'), format('>', width = 1, justify = 'right'),'\n\n')
 wynik_lubuskie = (D_54_l >= k54 & D_54_l <= 1)
+if(wynik_lubuskie)
+{
+  cat ('Test Kołmogorowa odrzuca hipotezę zerową, że rozkład zawartości cukru w procentach w dostawach buraków cukrowych ma rozkład normalny')
+}else
+{
+  cat ('Test Kołmogorowa nie odrzuca hipotezy zerowej, że rozkład zawartości cukru w procentach w dostawach buraków cukrowych ma rozkład normalny')
+}
+cat('\n=================================================================================================================================================\n')
 # wartość statystyki D_54_l należy do przedziału krytycznego więc odrzuca hipoteze zerową,
 # mówiącą o tym, że rozkład zawartości cukru w procentach u dostawców w województwie lubuskim jest rozkładem normalnym
 
+
+
 # Test Kołmogorowa wielkopolskie
+cat('=================================================================================================================================================\n')
+cat('WYNIK TESTU KOŁMOGOROWA-LILLIEFORSA DLA WOJEWÓDZTWA WIELKOPOLSKIEGO\n')
+cat(format("Statystyka testowa Dn =", justify = 'right', width = 44), sep = '', format(D_50_w, width = 12, justify = 'right'), '\n')
+cat(format("Przedział krytyczny =", justify = 'right', width = 44), sep = '', format('<', width = 5, justify = 'right'), format(k50 , width = 1, justify = 'right'), format(', ', width = 1, justify = 'right'), format(1, width = 1, justify = 'right'), format('>', width = 1, justify = 'right'),'\n\n')
 wynik_wielkopolskie = (D_50_w >= k50 & D_50_w <= 1)
+if(wynik_wielkopolskie)
+{
+  cat ('Test Kołmogorowa odrzuca hipotezę zerową, że rozkład zawartości cukru w procentach w dostawach buraków cukrowych ma rozkład normalny')
+}else
+{
+  cat ('Test Kołmogorowa nie odrzuca hipotezy zerowej, że rozkład zawartości cukru w procentach w dostawach buraków cukrowych ma rozkład normalny')
+}
+cat('\n=================================================================================================================================================\n')
 # wartość statystyki D_50_w należy do przedziału krytycznego więc odrzuca hipoteze zerową,
 # mówiącą o tym, że rozkład zawartości cukru w procentach u dostawców w województwie wielkopolskim jest rozkładem normalnym
 
