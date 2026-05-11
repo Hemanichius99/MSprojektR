@@ -376,10 +376,10 @@ wl['sss'] = round(sk_ss1,6)
 ww['sss'] = round(sk_ss2,6)
 
 # Skorśność szereg rozdzielczy
-sk_sr1 = sum((sr_lubuskie$mids - xsr_sr1)^3) /
+sk_sr1 = sum(((sr_lubuskie$mids - xsr_sr1)^3)*sr_lubuskie$counts) /
   (length(lubuskie) * os_sr1_r^3);sk_sr1
 
-sk_sr2 = sum((sr_wielkopolskie$mids - xsr_sr2)^3) /
+sk_sr2 = sum(((sr_wielkopolskie$mids - xsr_sr2)^3)*sr_wielkopolskie$counts) /
   (length(wielkopolskie) * os_sr2_r^3);sk_sr2
 
 wl['ssr'] = round(sk_sr1,6)
@@ -394,10 +394,10 @@ wl['kss'] = round(kur_ss1,6)
 ww['kss'] = round(kur_ss2,6)
 
 # Kurtoza szereg rozdzielczy
-kur_sr1 = sum((sr_lubuskie$mids - xsr_sr1)^4) /
+kur_sr1 = sum(((sr_lubuskie$mids - xsr_sr1)^4)*sr_lubuskie$counts) /
   (length(lubuskie) * os_sr1_r^4);kur_sr1
 
-kur_sr2 = sum((sr_wielkopolskie$mids - xsr_sr2)^4) /
+kur_sr2 = sum(((sr_wielkopolskie$mids - xsr_sr2)^4)*sr_wielkopolskie$counts) /
   (length(wielkopolskie) * os_sr2_r^4);kur_sr2
 
 wl['ksr'] = round(kur_sr1,6)
