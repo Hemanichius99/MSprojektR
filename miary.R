@@ -1,11 +1,4 @@
-# miary.R
-
-f_sr = function(x)
-{
-  bb = seq(min(x), max(x), length.out = 8)
-  hh = hist(x, breaks = bb, plot = FALSE)
-  return(hh)
-}
+#miary.R
 
 #funkcja zwracająca szereg rozdzielczy
 wart_sr = function (wektor) {
@@ -96,8 +89,10 @@ wart_sr = function (wektor) {
   return (wynik_sr)
 }
 
-oblicz_miary = function(wektor) {
+oblicz_miary = function(wektor,tytul = "MIARY STATYSTYCZNE") {
   n = length(wektor)
+  zakres_min = min(wektor)
+  zakres_max = max(wektor)
   
   #MIARY POŁOŻENIA
   sr = mean(wektor)
@@ -133,33 +128,64 @@ oblicz_miary = function(wektor) {
   krt = m4 / (odchylenie^4)
   g2 = krt - 3
   
-  wyniki = c(
-    "Średnia:" = sr,
-    "Mediana" = med,
-    "Moda" = moda,
-    "Q1" = q1,
-    "Q3" = q3,
-    "Wariancja S*^2" = war_proba,
-    "Odchylenie standardowe S*" = sd_proba,
-    "Wariancja S^2" = war_populacja,
-    "Odchylenie standardowe S" = sd_populacja,
-    "Odchylenie przeciętne d1" = d1,
-    "Odchylenie przeciętne od mediany d2" = d2,
-    "Odchylenie ćwiartkowe Q" = q,
-    "Współczynnik zmienności v [%]" = v,
-    "Pozycyjny współczynnik zmienności vq [%]" = vq,
-    "Skośność as" = as,
-    "Kurtoza krt" = krt,
-    "Eksces g2" = g2
-  )
-  
   szer_rozdz = wart_sr(wektor)
   
-  tabela_wynikow = data.frame(
-    Miara = names(wyniki),
-    wart_szer_szczeg = as.numeric(round(wyniki, 4)),
-    wart_szer_rozdziel = as.numeric(round(szer_rozdz, 4))
-  )
+  # Przygotowanie danych do wyświetlania (zaokrąglenia zgodne z Twoim wzorem)
+  w = list()
+  # Położenie
+  w["wsss"] = round(sr, 6); w["wssr"] = round(szer_rozdz[1], 6)
+  w["mess"] = round(med, 6); w["mesr"] = round(szer_rozdz[2], 6)
+  w["moss"] = round(moda, 6); w["mosr"] = round(szer_rozdz[3], 6)
+  w["q1ss"] = round(q1, 6); w["q1sr"] = round(szer_rozdz[4], 6)
+  w["q3ss"] = round(q3, 6); w["q3sr"] = round(szer_rozdz[5], 6)
+  # Rozproszenie
+  w["wnss"] = round(war_proba, 6); w["wnsr"] = round(szer_rozdz[6], 6)
+  w["osnss"] = round(sd_proba, 6); w["osnsr"] = round(szer_rozdz[7], 6)
+  w["wss"] = round(war_populacja, 6); w["wsr"] = round(szer_rozdz[8], 6)
+  w["osss"] = round(sd_populacja, 6); w["ossr"] = round(szer_rozdz[9], 6)
+  w["oposss"] = round(d1, 6); w["opossr"] = round(szer_rozdz[10], 6)
+  w["opomess"] = round(d2, 6); w["opomesr"] = round(szer_rozdz[11], 6)
+  w["oćss"] = round(q, 6); w["oćsr"] = round(szer_rozdz[12], 6)
+  w["wzss"] = round(v, 6); w["wzsr"] = round(szer_rozdz[13], 6)
+  w["pwzss"] = round(vq, 6); w["pwzsr"] = round(szer_rozdz[14], 6)
+  # Asymetria
+  w["sss"] = round(as, 6); w["ssr"] = round(szer_rozdz[15], 6)
+  w["kss"] = round(krt, 6); w["ksr"] = round(szer_rozdz[16], 6)
+  w["ess"] = round(g2, 6); w["esr"] = round(szer_rozdz[17], 6)
   
-  return(tabela_wynikow)
+  # --- WYŚWIETLANIE (Zgodne z Twoim wzorem formatowania) ---
+  cat("\n\n")
+  cat("=== MIARY:", tytul, "===\n")
+  cat(format("Liczba obserwacji =", justify = 'right', width = 44), sep = '', format(n, width = 17, justify = 'right'), '\n')
+  cat(format("Zakres =", justify = 'right', width = 44), sep = '', format('<', width = 5, justify = 'right'), format(zakres_min, width = 1, justify = 'right'), format(', ', width = 1, justify = 'right'), format(zakres_max, width = 1, justify = 'right'), format('>', width = 1, justify = 'right'),'\n\n')
+  
+  cat(format("Nazwa statystyki", justify = 'right', width = 44), sep = '', format("Sz. szcz.", width = 17, justify = 'right'), format("Sz. roz.", width = 12, justify = 'right'), '')
+  
+  cat("\n\nMiary położenia:\n")
+  cat("==========================================================================\n")
+  cat(format("Wartość średnia", justify = 'right', width = 44), sep = '', format(w["wsss"], width = 17, justify = 'right'), format(w["wssr"], width = 12, justify = 'right'), '\n',
+      format("Mediana", justify = 'right', width = 44), format(w["mess"], width = 17, justify = 'right'), format(w["mesr"], width = 12, justify = 'right'), '\n',
+      format("Moda", justify = 'right', width = 44), format(w["moss"], width = 17, justify = 'right'), format(w["mosr"], width = 12, justify = 'right'), '\n',
+      format("Q1", justify = 'right', width = 44), format(w["q1ss"], width = 17, justify = 'right'), format(w["q1sr"], width = 12, justify = 'right'), '\n',
+      format("Q3", justify = 'right', width = 44), format(w["q3ss"], width = 17, justify = 'right'), format(w["q3sr"], width = 12, justify = 'right'), '\n')
+  
+  cat("\n\nMiary rozproszenia:\n")
+  cat("==========================================================================\n")
+  cat(format("Wariancja nieobciążona S*2", justify = 'right', width = 44), sep = '', format(w["wnss"], width = 17, justify = 'right'), format(w["wnsr"], width = 12, justify = 'right'), '\n',
+      format("Odchylenie standardowe nieobciążone S*", justify = 'right', width = 44), format(w["osnss"], width = 17, justify = 'right'), format(w["osnsr"], width = 12, justify = 'right'), '\n',
+      format("Wariancja S2", justify = 'right', width = 44), format(w["wss"], width = 17, justify = 'right'), format(w["wsr"], width = 12, justify = 'right'), '\n',
+      format("Odchylenie standardowe S", justify = 'right', width = 44), format(w["osss"], width = 17, justify = 'right'), format(w["ossr"], width = 12, justify = 'right'), '\n',
+      format("Odchylenie przeciętne d1", justify = 'right', width = 44), format(w["oposss"], width = 17, justify = 'right'), format(w["opossr"], width = 12, justify = 'right'), '\n',
+      format("Odchylenie przeciętne od mediany d2", justify = 'right', width = 44), format(w["opomess"], width = 17, justify = 'right'), format(w["opomesr"], width = 12, justify = 'right'), '\n',
+      format("Odchylenie ćwiartkowe", justify = 'right', width = 44), format(w["oćss"], width = 17, justify = 'right'), format(w["oćsr"], width = 12, justify = 'right'), '\n',
+      format("Współczynnik zmienności w % v", justify = 'right', width = 44), format(w["wzss"], width = 17, justify = 'right'), format(w["wzsr"], width = 12, justify = 'right'), '\n',
+      format("Pozycyjny współczynnik zmienności w % vq", justify = 'right', width = 44), format(w["pwzss"], width = 17, justify = 'right'), format(w["pwzsr"], width = 12, justify = 'right'), '\n')
+  
+  cat("\n\nMiary asymetrii i koncentracji:\n")
+  cat("==========================================================================\n")
+  cat(format("Skośność as", justify = 'right', width = 44), sep = '', format(w["sss"], width = 17, justify = 'right'), format(w["ssr"], width = 12, justify = 'right'), '\n',
+      format("Kurtoza krt", justify = 'right', width = 44), format(w["kss"], width = 17, justify = 'right'), format(w["ksr"], width = 12, justify = 'right'), '\n',
+      format("Eksces g2", justify = 'right', width = 44), format(w["ess"], width = 17, justify = 'right'), format(w["esr"], width = 12, justify = 'right'), '\n')
+  
+  invisible(NULL)
 }
