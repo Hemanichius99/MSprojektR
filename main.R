@@ -21,14 +21,12 @@ bbpp(wektor_lubuskie, "lubuskie")
 #a i b w jednej tabeli
 
 #obliczone wartości LUBUSKIE
-cat("\n=== MIARY: WOJEWÓDZTWO LUBUSKIE ===\n")
-miary_L = oblicz_miary(wektor_lubuskie)
-print(miary_L, row.names = FALSE)
+miary_L = oblicz_miary(wektor_lubuskie, "WOJEWÓDZTWO LUBUSKIE")
+cat(miary_L, row.names = FALSE)
 
 #obliczone wartości WIELKOPOLSKIE
-cat("\n=== MIARY: WOJEWÓDZTWO WIELKOPOLSKIE ===\n")
-miary_W = oblicz_miary(wektor_wielkopolskie)
-print(miary_W, row.names = FALSE)
+miary_W = oblicz_miary(wektor_wielkopolskie, "WOJEWÓDZTWO WIELKOPOLSKIE")
+cat(miary_W)
 
 #WYKRESY
 lubuskie_rozdzielczy = seq(min(wektor_lubuskie), max(wektor_lubuskie), length.out = 8)
@@ -61,4 +59,5 @@ mhipo(wektor_lubuskie, wektor_wielkopolskie, alpha)
 
 
 #zadanie 7
+alpha = 0.05
 ptt(wektor_lubuskie, wektor_wielkopolskie, alpha, hipoteza = "dwustronny", R = 10000)

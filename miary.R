@@ -94,40 +94,64 @@ oblicz_miary = function(wektor,tytul = "MIARY STATYSTYCZNE") {
   zakres_min = min(wektor)
   zakres_max = max(wektor)
   
-  #MIARY POŁOŻENIA
+  # wartość średnia szereg szczegółowy
   sr = mean(wektor)
+  
+  # mediana szereg szczegółowy
   med = median(wektor)
   
+  # moda szereg szczegółowy
   ux = unique(wektor)
   moda = ux[which.max(tabulate(match(wektor, ux)))]
   
+  # kwartyle szereg szczegółowy (Q1 i Q3)
   q_wynik = quantile(wektor, probs = c(0.25, 0.75), type = 6)
   q1 = q_wynik[1]
   q3 = q_wynik[2]
   
-  #MIARY ROZPROSZENIA
+  # wariancja nieobciążona s2* szereg szczegółowy
   war_proba = var(wektor)
+  
+  # odchylenie standardowe nieobciążone s* szereg szczegółowy
   sd_proba = sd(wektor)
   
+  # wariancja s2 szereg szczegółowy
   war_populacja = sum((wektor - sr)^2) / n
+  
+  # odchylenie standardowe s szereg szczegółowy
   sd_populacja = sqrt(war_populacja)
   
+  # odchylenie przeciętne od średniej d1 szereg szczegółowy
   d1 = sum(abs(wektor - sr)) / n
+  
+  # odchylenie przeciętne od mediany d2 szereg szczegółowy
   d2 = sum(abs(wektor - med)) / n
   
   odchylenie = sd_populacja
+  
+  # odchylenie ćwiartkowe szereg szczegółowy
   q = (q3 - q1) / 2
+  
+  # współczynnik zmienności szereg szczegółowy
   v = (odchylenie / sr) * 100
+  
+  # pozycyjny współczynnik zmienności szereg szczegółowy
   vq = (q / med) * 100
   
-  #MIARY ASYMETRII I KONCENTRACJI
+  # momenty centralne (trzeci i czwarty)
   m3 = sum((wektor - sr)^3) / n
   m4 = sum((wektor - sr)^4) / n
   
+  # skośność szereg szczegółowy
   as = m3 / (odchylenie^3)
+  
+  # kurtoza szereg szczegółowy
   krt = m4 / (odchylenie^4)
+  
+  # eksces szereg szczegółowy
   g2 = krt - 3
   
+  # Pobranie wyników dla szeregu rozdzielczego
   szer_rozdz = wart_sr(wektor)
   
   # Przygotowanie danych do wyświetlania (zaokrąglenia zgodne z Twoim wzorem)
